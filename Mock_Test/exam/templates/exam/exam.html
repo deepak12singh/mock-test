@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+{% load markdown_math %} {% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mock Test Exam</title>
+    <!-- MathJax Configuration -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .exam-container {
+        width: 80%;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .exam-header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+      }
+
+      .timer {
+        font-size: 18px;
+        font-weight: bold;
+        color: red;
+      }
+
+      .top-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 15px;
+      }
+
+      .question-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        width: 70%;
+      }
+
+      .q-btn {
+        width: 30px;
+        height: 30px;
+        margin: 3px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        background: #007bff;
+        color: white;
+      }
+
+      .q-btn.review {
+        background: orange;
+      }
+
+      .q-btn.attempted {
+        background: green;
+      }
+
+      .q-btn.not-attempted {
+        background: gray;
+      }
+
+      .stats {
+        width: 25%;
+        text-align: left;
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+
+      .stats p {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 5px 0;
+      }
+
+      .question-container {
+        margin-top: 20px;
+        padding: 15px;
+        border: 2px solid #ddd;
+        background: #f9f9f9;
+      }
+
+      .options label {
+        display: block;
+        margin: 8px 0;
+        cursor: pointer;
+      }
+
+      .exam-footer {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .exam-footer button {
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        color: white;
+      }
+
+      #prev-btn {
+        background: #ffc107;
+      }
+      #next-btn {
+        background: #007bff;
+      }
+      #review-btn {
+        background: orange;
+      }
+      #submit-btn {
+        background: #dc3545;
+      }
+      #review-btn.marked {
+        background-color: darkorange;
+        font-weight: bold;
+        border: 2px solid #cc8400;
+      }
+
+      .loading-spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Styles for locked/answered questions */
+      .answered-locked {
+        background-color: #f8f8f8 !important;
+        border: 2px solid #ddd !important;
+        position: relative;
+      }
+
+      .locked-message {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #ffe8e8;
+        border: 1px solid #ffcccc;
+        border-radius: 5px;
+        color: #d63031;
+        text-align: center;
+      }
+
+      input[type="radio"]:disabled + label {
+        color: #888;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    {% csrf_token %}
+    <div class="exam-container">
+      <!-- Add loading overlay -->
+      <div id="loading" class="loading">
+        {% comment %}
+        <div class="loading-spinner"></div>
+        {% endcomment %} {% comment %}
+        <p id="loading-text">Loading...</p>
+        {% endcomment %}
+      </div>
+      <div class="exam-header">
+        <div>
+          <p><strong>Name:</strong> {{ first_name }} {{ last_name }}</p>
+          <p><strong>Exam:</strong> {{ exam_type }}</p>
+          <p><strong>Subject:</strong> {{ subject }}</p>
+        </div>
+        <div class="timer">
+          <p style="color: black">
+            <strong>Exam Name:</strong> {{ Exam_name }}
+          </p>
+          <p>Time Left: <span id="timer">{{ Exam_Time }}</span></p>
+        </div>
+      </div>
+
+      <div class="top-section">
+        <div class="question-buttons" id="question-buttons"></div>
+        <div class="stats">
+          <h3>Exam Status</h3>
+          <p>Attempted: <span id="attempted-count">0</span></p>
+          <p>Marked for Review: <span id="review-count">0</span></p>
+          <p>Unattempted: <span id="unanswered-count">75</span></p>
+          <p>Not Attempted: <span id="not-attempted-count">0</span></p>
+        </div>
+      </div>
+
+      <div class="question-container">
+        <h3 id="question-text">Loading question...</h3>
+        <div class="options">
+          <label
+            ><input type="radio" name="option" value="A" />
+            <span id="optA">Option A</span></label
+          >
+          <label
+            ><input type="radio" name="option" value="B" />
+            <span id="optB">Option B</span></label
+          >
+          <label
+            ><input type="radio" name="option" value="C" />
+            <span id="optC">Option C</span></label
+          >
+          <label
+            ><input type="radio" name="option" value="D" />
+            <span id="optD">Option D</span></label
+          >
+          <label
+            ><input type="radio" name="none" value="none" />
+            <span id="none">Not Attempted</span></label
+          >
+        </div>
+      </div>
+
+      <div class="exam-footer">
+        <button id="prev-btn" onclick="prevQuestion()">Previous</button>
+        <button id="next-btn" onclick="nextQuestion()">Next</button>
+        <button id="review-btn" onclick="markForReview()">
+          Mark for Review
+        </button>
+        <button id="submit-btn" onclick="submitExam()">Submit</button>
+      </div>
+    </div>
+    <script>
+        // Initialize MathJax queue for typesetting
+        const typesetMath = () => {
+            if (typeof MathJax !== 'undefined' && MathJax.Hub) {
+                try {
+                    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+                } catch (error) {
+                    console.error("MathJax typesetting error:", error);
+                }
+            }
+        };
+
+        // Debug the questions data
+        console.log("Questions data:", {{ questions|safe }});
+
+        // Initialize questions array and ensure it's not empty
+        let questions = [];
+        try {
+            questions = {{ questions|safe }} || [];
+            if (!Array.isArray(questions)) {
+                console.error("Questions data is not an array:", questions);
+                questions = [];
+            }
+        } catch (error) {
+            console.error("Error parsing questions:", error);
+        }
+
+        // Debug the processed questions
+        console.log("Processed questions:", questions);
+
+        // Set the total count
+        const questionCount = questions.length;
+        console.log(`Total questions: ${questionCount}`);
+
+        // Initialize state
+        let currentQuestion = 0;
+        let selectedAnswers = {};
+        let markedForReview = new Set();
+        let timeLeft = {{Exam_Time}}; // 90 minutes
+        let timerInterval = null;
+
+        // Try to restore saved state
+        try {
+            const savedQuestion = localStorage.getItem("currentQuestion");
+            const savedAnswers = localStorage.getItem("selectedAnswers");
+            const savedReview = localStorage.getItem("markedForReview");
+            const savedTime = localStorage.getItem("timeLeft");
+            const savedQuestionId = localStorage.getItem("currentQuestionId");
+
+            if (savedAnswers) selectedAnswers = JSON.parse(savedAnswers);
+            if (savedReview) markedForReview = new Set(JSON.parse(savedReview));
+            if (savedTime) timeLeft = parseInt(savedTime);
+
+            // First try to restore by question ID if available
+            if (savedQuestionId && questions.length > 0) {
+                const questionIdToFind = parseInt(savedQuestionId);
+                const foundIndex = questions.findIndex(q => q.id === questionIdToFind);
+                if (foundIndex !== -1) {
+                    currentQuestion = foundIndex;
+                } else if (savedQuestion) {
+                    // Fall back to index-based restoration if ID-based fails
+                    currentQuestion = parseInt(savedQuestion);
+                }
+            } else if (savedQuestion) {
+                currentQuestion = parseInt(savedQuestion);
+            }
+        } catch (error) {
+            console.error("Error restoring saved state:", error);
+        }
+
+        // Navigation functions
+        function nextQuestion() {
+            saveAnswer(); // Save current answer before moving
+            if (currentQuestion < questions.length - 1) {
+                loadQuestion(currentQuestion + 1);
+            }
+        }
+
+        function prevQuestion() {
+            saveAnswer(); // Save current answer before moving
+            if (currentQuestion > 0) {
+                loadQuestion(currentQuestion - 1);
+            }
+        }
+
+        // Save answer function
+        function saveAnswer() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            const notAttemptedOption = document.querySelector('input[name="none"]:checked');
+
+            const questionId = questions[currentQuestion].id;
+
+            if (selectedOption) {
+                selectedAnswers[questionId] = selectedOption.value;
+                localStorage.setItem("selectedAnswers", JSON.stringify(selectedAnswers));
+            } else if (notAttemptedOption) {
+                selectedAnswers[questionId] = "none";
+                localStorage.setItem("selectedAnswers", JSON.stringify(selectedAnswers));
+            }
+
+            updateQuestionButtonStates();
+            updateStats();
+        }
+
+        // Mark for review function
+        function markForReview() {
+            saveAnswer(); // Save answer when marking for review
+            const currentQuestionId = questions[currentQuestion].id;
+            if (markedForReview.has(currentQuestionId)) {
+                markedForReview.delete(currentQuestionId);
+            } else {
+                markedForReview.add(currentQuestionId);
+            }
+
+            // Save to localStorage
+            localStorage.setItem("markedForReview", JSON.stringify(Array.from(markedForReview)));
+
+            // Update UI
+            updateQuestionButtonStates();
+            updateStats();
+
+            // Update review button text
+            const reviewBtn = document.getElementById("review-btn");
+            if (markedForReview.has(currentQuestionId)) {
+                reviewBtn.textContent = "Unmark Review";
+                reviewBtn.classList.add("marked");
+            } else {
+                reviewBtn.textContent = "Mark for Review";
+                reviewBtn.classList.remove("marked");
+            }
+        }
+
+        function updateQuestionButtonStates() {
+            const buttons = document.querySelectorAll('.q-btn');
+            buttons.forEach((btn, index) => {
+                const question = questions[index];
+                btn.classList.remove('attempted', 'review', 'not-attempted');
+
+                if (selectedAnswers[question.id]) {
+                    if (selectedAnswers[question.id] === "none") {
+                        btn.classList.add('not-attempted');
+                    } else {
+                        btn.classList.add('attempted');
+                    }
+                }
+                if (markedForReview.has(question.id)) {
+                    btn.classList.add('review');
+                }
+            });
+        }
+
+        function updateStats() {
+            const attempted = Object.values(selectedAnswers).filter(val => val !== "none").length;
+            const notAttempted = Object.values(selectedAnswers).filter(val => val === "none").length;
+            const reviewed = markedForReview.size;
+            const total = questions.length;
+
+            document.getElementById("attempted-count").textContent = attempted;
+            document.getElementById("review-count").textContent = reviewed;
+            document.getElementById("unanswered-count").textContent = total - attempted - notAttempted;
+            document.getElementById("not-attempted-count").textContent = notAttempted;
+        }
+
+        // Add event listener for radio button changes
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'option') {
+                // Uncheck the "Not Attempted" option if any other option is selected
+                document.querySelectorAll('input[name="none"]').forEach(input => {
+                    input.checked = false;
+                });
+                saveAnswer();
+            } else if (e.target.name === 'none') {
+                // Uncheck all other options if "Not Attempted" is selected
+                document.querySelectorAll('input[name="option"]').forEach(input => {
+                    input.checked = false;
+                });
+                saveAnswer();
+            }
+        });
+
+        function loadQuestion(index) {
+            console.log("Loading question:", { index, total: questions.length });
+
+            if (!questions.length) {
+                document.getElementById("question-text").innerHTML = "<strong>Error:</strong> No questions available.";
+                return;
+            }
+
+            if (index < 0 || index >= questions.length) {
+                console.error("Invalid question index:", index);
+                return;
+            }
+
+            // Show loading indicator
+            document.getElementById("loading").style.display = "block";
+
+            currentQuestion = index;
+            const question = questions[index];
+
+            console.log("Current question data:", question);
+
+            try {
+                // Save both the index and the question ID
+                localStorage.setItem("currentQuestion", index);
+                localStorage.setItem("currentQuestionId", question.id);
+
+                // Update question text and ensure it's not undefined
+                const questionText = question.question || "Question not available";
+                document.getElementById("question-text").innerHTML =
+                    `<strong>Question ${index + 1}:</strong> ${marked.parseInline(question.question || "Question not available")}`; 
+
+                // Update options with fallbacks for undefined values        
+                document.getElementById("optA").innerHTML = marked.parseInline(question.option_a || "Option not available");
+                document.getElementById("optB").innerHTML = marked.parseInline(question.option_b || "Option not available");
+                document.getElementById("optC").innerHTML = marked.parseInline(question.option_c || "Option not available");
+                document.getElementById("optD").innerHTML = marked.parseInline(question.option_d || "Option not available");
+            
+
+                // Clear previous selection
+                document.querySelectorAll('input[name="option"]').forEach(input => {
+                    input.checked = false;
+                });
+                document.querySelectorAll('input[name="none"]').forEach(input => {
+                    input.checked = false;
+                });
+
+                // Set saved answer if exists
+                if (selectedAnswers[question.id]) {
+                    if (selectedAnswers[question.id] === "none") {
+                        const radio = document.querySelector('input[name="none"][value="none"]');
+                        if (radio) radio.checked = true;
+                    } else {
+                        const radio = document.querySelector(`input[name="option"][value="${selectedAnswers[question.id]}"]`);
+                        if (radio) radio.checked = true;
+                    }
+                }
+
+                // Update navigation buttons
+                document.getElementById("prev-btn").disabled = index === 0;
+                document.getElementById("next-btn").disabled = index === questions.length - 1;
+
+                // Save current state
+                localStorage.setItem("currentQuestion", index);
+
+                // Update question button states
+                updateQuestionButtonStates();
+
+                // Update review button state
+                const reviewBtn = document.getElementById("review-btn");
+                if (markedForReview.has(question.id)) {
+                    reviewBtn.textContent = "Unmark Review";
+                    reviewBtn.classList.add("marked");
+                } else {
+                    reviewBtn.textContent = "Mark for Review";
+                    reviewBtn.classList.remove("marked");
+                }
+
+                // Render math with error handling
+                setTimeout(() => {
+                    typesetMath();
+                }, 100);
+            } catch (error) {
+                console.error("Error loading question:", error);
+                document.getElementById("question-text").innerHTML = "<strong>Error:</strong> Failed to load question.";
+            }
+
+            // Hide loading indicator after a small delay to ensure everything is rendered
+            setTimeout(() => {
+                document.getElementById("loading").style.display = "none";
+            }, 500);
+        }
+
+        function generateQuestionButtons() {
+            try {
+                const container = document.getElementById("question-buttons");
+                container.innerHTML = ''; // Clear existing buttons
+
+                questions.forEach((question, index) => {
+                    const button = document.createElement("button");
+                    button.className = "q-btn";
+                    button.textContent = index + 1;
+                    button.onclick = () => {
+                        saveAnswer(); // Save current answer before switching
+                        loadQuestion(index);
+                    };
+
+                    // Add initial state if question is attempted or marked for review
+                    if (selectedAnswers[question.id]) {
+                        if (selectedAnswers[question.id] === "none") {
+                            button.classList.add("not-attempted");
+                        } else {
+                            button.classList.add("attempted");
+                        }
+                    }
+                    if (markedForReview.has(question.id)) {
+                        button.classList.add("review");
+                    }
+
+                    container.appendChild(button);
+                });
+
+                // Initial stats update
+                updateStats();
+                updateQuestionButtonStates();
+            } catch (error) {
+                console.error("Error generating question buttons:", error);
+            }
+        }
+
+        function startTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                } else {
+                    updateTimerUI();
+                    localStorage.setItem("timeLeft", timeLeft);
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            document.getElementById("timer").innerText = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+        }
+
+        function submitExam() {
+            if (!confirm("Are you sure you want to submit your exam?")) {
+                return;
+            }
+
+            try {
+                // Show loading overlay
+                const loadingElement = document.getElementById("loading");
+                if (loadingElement) {
+                    loadingElement.style.display = "block";
+                }
+
+                const loadingTextElement = document.getElementById("loading-text");
+                if (loadingTextElement) {
+                    loadingTextElement.textContent = "Submitting exam...";
+                }
+
+                // Save current answer before submitting
+                saveAnswer();
+
+                console.log('Selected answers:', selectedAnswers);
+
+                // Check if any questions are attempted
+                if (Object.keys(selectedAnswers).length === 0) {
+                    alert("Please attempt at least one question before submitting.");
+                    if (loadingElement) {
+                        loadingElement.style.display = "none";
+                    }
+                    return;
+                }
+
+                // Prepare question indices mapping
+                const questionIndices = {};
+                questions.forEach((question, index) => {
+                    questionIndices[question.id] = index;
+                });
+
+                console.log('Question indices:', questionIndices);
+
+                // Prepare data for submission
+                const data = {
+                    answers: selectedAnswers,
+                    exam_name: "{{ Exam_name }}",
+                    subject : "{{ subject }}",
+                    exam_type: "{{ exam_type }}",
+                    question_indices: questionIndices
+                };
+
+                console.log("Submitting exam data:", data);
+
+                // Get CSRF token
+                const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                // Submit the exam
+                fetch('/exam/submit/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Server response not OK:', response.status, response.statusText);
+                        return response.text().then(text => {
+                            throw new Error(`Server error (${response.status}): ${text || response.statusText}`);
+                        });
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    console.log("Exam submitted successfully");
+                    document.open();
+                    document.write(html);
+                    document.close();
+                    // Clear localStorage after successful submission
+                    localStorage.removeItem("currentQuestion");
+                    localStorage.removeItem("selectedAnswers");
+                    localStorage.removeItem("markedForReview");
+                    localStorage.removeItem("timeLeft");
+                    localStorage.removeItem("examInProgress");
+                    localStorage.removeItem("currentQuestionId");
+                })
+                .catch(error => {
+                    console.error("Error submitting exam:", error);
+                    if (loadingElement) {
+                        loadingElement.style.display = "none";
+                    }
+                    alert("An error occurred while submitting the exam. Please try again.\nError details: " + error.message);
+                });
+
+            } catch (error) {
+                console.error("Exception in submitExam:", error);
+                const loadingElement = document.getElementById("loading");
+                if (loadingElement) {
+                    loadingElement.style.display = "none";
+                }
+                alert("An error occurred while preparing the exam submission. Please try again.");
+            }
+        }
+
+        function displayResults(data) {
+            const examContainer = document.querySelector('.exam-container');
+            const resultsHtml = `
+                <div class="results-summary">
+                    <h3>Exam Results</h3>
+                    <p>Total Questions: ${data.total_questions}</p>
+                    <p>Attempted: ${data.attempted}</p>
+                    <p>Correct Answers: ${data.correct}</p>
+                    <p>Score: ${data.score}%</p>
+
+                    <div class="question-status">
+                        <h4>Question Status:</h4>
+                        ${questions.map((question, index) => {
+                            let status;
+                            if (!selectedAnswers[question.id]) {
+                                status = 'unattempted';
+                            } else if (data.correct_answers[question.id] === selectedAnswers[question.id]) {
+                                status = 'correct';
+                            } else {
+                                status = 'incorrect';
+                            }
+                            return `<div class="question-item ${status}">Q${index + 1}</div>`;
+                        }).join('')}
+                    </div>
+
+                    <div class="question-details">
+                        <h4>Detailed Question Analysis:</h4>
+                        ${questions.map((question, index) => {
+                            const attempted = selectedAnswers[question.id];
+                            const correctAnswer = data.correct_answers[question.id];
+                            return `
+                                <div class="question-detail">
+                                    <p><strong>Question ${index + 1}:</strong></p>
+                                    <p>${question.text}</p>
+                                    <p>Your Answer: ${attempted ? attempted : 'Not Attempted'}</p>
+                                    <p>Correct Answer: ${correctAnswer}</p>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+            examContainer.innerHTML = resultsHtml;
+
+            // Re-render MathJax content if needed
+            if (window.MathJax) {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
+        }
+
+        {% comment %} // Add event listener for page reload/navigation
+        window.addEventListener('beforeunload', function(e) {
+            // Save current state before unload
+            saveAnswer();
+            localStorage.setItem("examInProgress", "true");
+
+            // Cancel the event and show confirmation dialog
+            e.preventDefault();
+            // Chrome requires returnValue to be set
+            e.returnValue = 'Changes you made may not be saved. Are you sure you want to leave?';
+            return 'Changes you made may not be saved. Are you sure you want to leave?';
+        }); {% endcomment %}
+
+        // Check if exam was in progress when page loads
+        window.addEventListener('load', function() {
+            console.log("Page loaded, initializing exam...");
+
+            // Check if we're coming back from a reload
+            const examInProgress = localStorage.getItem("examInProgress");
+            if (examInProgress === "true") {
+                console.log("Exam was in progress, restoring state...");
+                // We don't need to do anything special here since the restore code
+                // in the initialization already handles this
+            }
+
+            generateQuestionButtons();
+            loadQuestion(currentQuestion);
+            updateStats();
+            startTimer();
+
+            //Add event listeners for navigation buttons
+            //document.getElementById("prev-btn").addEventListener("click", prevQuestion);
+            //document.getElementById("next-btn").addEventListener("click", nextQuestion);
+            //document.getElementById("review-btn").addEventListener("click", markForReview);
+            //document.getElementById("submit-btn").addEventListener("click", submitExam);
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') {
+                    nextQuestion();
+                } else if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') {
+                    prevQuestion();
+                } else if (e.key === 'r' || e.key === 'R') {
+                    markForReview();
+                }
+            });
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Exam Tips - CUET 2025{% endblock %}
+
+{% block style %}
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0ff;
+    }
+    header, footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+    }
+    nav {
+        display: flex;
+        justify-content: space-between;
+        background: #444;
+        padding: 10px;
+    }
+    .nav-left, .nav-right {
+        display: flex;
+    }
+    nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+    }
+    nav a:hover {
+        background: #555;
+    }
+    .container {
+        width: 80%;
+        margin: 30px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+    h2 {
+        color: #333;
+    }
+    .tips-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .tip {
+        background: #fff;
+        padding: 15px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        border: 2px solid #444;
+        max-width: 300px;
+        text-align: center;
+    }
+    .tip i {
+        font-size: 24px;
+        margin-right: 10px;
+        color: #444;
+    }
+    .motivation {
+        font-size: 18px;
+        font-weight: bold;
+        color: #444;
+        margin-top: 20px;
+        padding: 15px;
+        background: #fffae5;
+        border-left: 5px solid #ffa500;
+        border-radius: 5px;
+    }
+</style>
+{% endblock style %}
+
+{% block header %}
+<header>
+    <h1>Exam Prep Site</h1>
+    <p>Your Gateway to Exam Success</p>
+</header>
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+    <h2>Top 15 Exam Tips for Success</h2>
+    <div class="tips-grid">
+        <div class="tip"><i class="fas fa-calendar-alt"></i> Create a study plan and stick to it.</div>
+        <div class="tip"><i class="fas fa-hourglass-half"></i> Manage your time effectively.</div>
+        <div class="tip"><i class="fas fa-pen"></i> Take clear and concise notes.</div>
+        <div class="tip"><i class="fas fa-book-open"></i> Practice previous year question papers.</div>
+        <div class="tip"><i class="fas fa-bed"></i> Get enough sleep before the exam.</div>
+        <div class="tip"><i class="fas fa-apple-alt"></i> Eat healthy and stay hydrated.</div>
+        <div class="tip"><i class="fas fa-sync-alt"></i> Revise regularly to reinforce learning.</div>
+        <div class="tip"><i class="fas fa-question-circle"></i> Clear doubts by discussing with teachers or peers.</div>
+        <div class="tip"><i class="fas fa-brain"></i> Stay positive and keep a confident mindset.</div>
+        <div class="tip"><i class="fas fa-spa"></i> Practice meditation or relaxation techniques.</div>
+        <div class="tip"><i class="fas fa-users"></i> Study in groups for better understanding.</div>
+        <div class="tip"><i class="fas fa-bullseye"></i> Set small achievable goals.</div>
+        <div class="tip"><i class="fas fa-trophy"></i> Reward yourself for completing study targets.</div>
+        <div class="tip"><i class="fas fa-running"></i> Do light exercise to keep your mind fresh.</div>
+        <div class="tip"><i class="fas fa-pencil-alt"></i> Attempt mock tests to evaluate yourself.</div>
+    </div>
+    <div class="motivation">🌟 "Believe in yourself! Hard work and dedication will always pay off." 🌟</div>
+</div>
+
+{% endblock %}
+
+{% block script %} 
+{% endblock script %}

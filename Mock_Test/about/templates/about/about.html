@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block title %}
+About CUET UG & PG
+{% endblock title %}
+
+{% block style %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0ff;
+    }
+    header, footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+    }
+    nav {
+        display: flex;
+        justify-content: space-between;
+        background: #444;
+        padding: 10px;
+    }
+    .nav-left {
+        display: flex;
+    }
+    .nav-right {
+        display: flex;
+    }
+    nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+    }
+    nav a:hover {
+        background: #555;
+    }
+    .container {
+        width: 80%;
+        margin: 20px auto;
+        text-align: left;
+    }
+    h2 {
+        text-align: center;
+    }
+    p {
+        font-size: 1.1em;
+        line-height: 1.6;
+    }
+</style>
+{% endblock style %}
+
+{% block header %}
+<header>
+    <h1>CUET 2025 Mock Test | Attempt Free CUET Mocks</h1>
+</header>
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+    <h2>About Our Project</h2>
+        <p>
+            <strong> Exam Prep Site</strong> is a student-focused web application designed to support aspirants preparing for exams like CUET UG, CUET PG, and more in the future such as SSC, UPSC, and Bank exams. This platform offers a smooth and free mock testing experience with performance tracking and essential exam resources.
+        </p>
+
+        <div class="highlight">
+            <strong>Our Mission:</strong> To provide a free, accessible, and powerful preparation platform for every student aiming for competitive exams, regardless of their background or location.
+        </div>
+
+        <h3>Key Features</h3>
+        <ul>
+            <li>Free subject-wise mock tests for CUET UG and PG</li>
+            <li>Performance tracking and analysis for every test attempt</li>
+            <li>Latest notifications, syllabus, FAQs, and exam tips</li>
+            <li>Clean user interface with easy navigation</li>
+            <li>Admin panel for managing content, questions, and users</li>
+        </ul>
+
+        <h3>Current Coverage</h3>
+        <p>The app currently supports:</p>
+        <ul>
+            <li><strong>CUET UG</strong> - Major subjects with syllabus and practice tests</li>
+            <li><strong>CUET PG</strong> - Streams like English, Hindi, MCA, MBA, M.Com, and MA</li>
+        </ul>
+
+        <h3>Tech Stack</h3>
+        <ul>
+            <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+            <li><strong>Backend:</strong> Django (Python)</li>
+            <li><strong>Database:</strong> SQLite (development), with future integration to cloud DB</li>
+            <li><strong>Hosting:</strong> Google Cloud Platform</li>
+        </ul>
+
+        <h3>Future Enhancements</h3>
+        <ul>
+            <li>Adding mock tests for more competitive exams like SSC, UPSC, and Banking</li>
+            <li>Introducing a mobile-friendly version of the site</li>
+            <li>AI-driven question suggestions and adaptive learning modules</li>
+        </ul>
+
+        <h3>Why Use Our Platform?</h3>
+        <p>
+            We created this platform out of the need for a truly student-centric exam preparation space. Our system is free, user-friendly, and tailored to the actual exam formats. We're constantly evolving based on student feedback and competitive exam trends.
+        </p>
+    </div>
+    <footer>
+        <p>&copy; 2025 CUET Mock Test. All Rights Reserved.</p>
+    </footer>
+
+
+{% endblock content %}

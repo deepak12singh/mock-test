@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}participating_university{% endblock %}
+
+{% block style %}
+<style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+
+    header, footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #535252;
+      padding: 10px 20px;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      background: #3c5d76;
+      border-radius: 5px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 25px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 28px;
+      border-bottom: 3px solid #3498db;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .section {
+      margin-bottom: 35px;
+      padding: 20px;
+      background: #f7fbff;
+      border-left: 5px solid #3498db;
+      border-radius: 8px;
+    }
+
+    .section h3 {
+      color: #2980b9;
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    ul {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+
+    p {
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+
+    .icon-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .icon-heading .material-symbols-outlined {
+      font-size: 28px;
+      color: #3498db;
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 14px;
+    }
+  </style>
+{% endblock style %}
+
+{% block header %}
+<header>
+    <h1>Exam Prep</h1>
+    <p>Your gateway to exam success</p>
+  </header>
+{% endblock header %}
+
+{% block content %}
+
+<div class="container">
+    <h2>CUET UG Exam Details</h2>
+
+    <div class="section">
+      <div class="icon-heading">
+        <!--<span class="material-symbols-outlined">list_alt</span>-->
+        <h3>CUET Exam Pattern for 2025</h3>
+      </div>
+      <p>The CUET exam consists of the following sections:</p>
+      <ul>
+        <li><strong>Section I:</strong> Language Test (IA and IB)</li>
+        <li><strong>Section II:</strong> Domain-Specific Subjects</li>
+        <li><strong>Section III:</strong> General Test</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="icon-heading">
+        <!--<span class="material-symbols-outlined">translate</span>-->
+        <h3>Section I: Language Test</h3>
+      </div>
+      <ul>
+        <li><strong>IA:</strong> 13 Languages (English, Hindi, Bengali, Tamil, etc.)</li>
+        <li><strong>IB:</strong> 20 Languages (Optional)</li>
+        <li>Each test: 40 questions to be answered out of 50</li>
+        <li>Includes reading comprehension: factual, literary, narrative</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="icon-heading">
+        <!--<span class="material-symbols-outlined">book</span>-->
+        <h3>Section II: Domain-Specific Subjects</h3>
+      </div>
+      <ul>
+        <li>27 subjects available (e.g., Maths, Physics, Chemistry)</li>
+        <li>Max 6 domain subjects allowed</li>
+        <li>Each test: 40 questions to be answered out of 50</li>
+        <li>Based on NCERT Class 12 syllabus</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="icon-heading">
+        <!--<span class="material-symbols-outlined">psychology</span>-->
+        <h3>Section III: General Test</h3>
+      </div>
+      <ul>
+        <li>General Knowledge & Current Affairs</li>
+        <li>Numerical Ability, Logical & Analytical Reasoning</li>
+        <li>60 questions to be answered out of 75</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="icon-heading">
+        <!--<span class="material-symbols-outlined">score</span>-->
+        <h3>Marking Scheme</h3>
+      </div>
+      <ul>
+        <li>+5 for each correct answer</li>
+        <li>-1 for incorrect answer</li>
+        <li>No penalty for unattempted questions</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="icon-heading">
+        <!--<span class="material-symbols-outlined">timer</span>-->
+        <h3>Exam Duration</h3>
+      </div>
+      <ul>
+        <li>Section I: 45 minutes per language</li>
+        <li>Section II: 45 minutes per domain subject</li>
+        <li>Section III: 60 minutes</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="icon-heading">
+        <span class="material-symbols-outlined">language</span>
+        <h3>Mode & Medium</h3>
+      </div>
+      <ul>
+        <li><strong>Mode:</strong> Computer-Based Test (CBT)</li>
+        <li><strong>Medium:</strong> English, Hindi & other regional languages</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="icon-heading">
+        <!--<span class="material-symbols-outlined">tips_and_updates</span>-->
+        <h3>CUET Exam Preparation Plan</h3>
+      </div>
+      <p>
+        Start CUET preparation along with your board exams to get an edge. Understand the exam format and syllabus first.
+        Create a smart study plan and maintain consistency, dedication, and proper time management to succeed.
+      </p>
+    </div>
+  </div>
+  
+{% endblock %}
+
+{% block script %} 
+
+{% endblock script %}

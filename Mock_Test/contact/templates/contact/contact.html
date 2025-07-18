@@ -1,0 +1,84 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+Contact Us - CUET Mock Test
+{% endblock title %}
+
+{% block style %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0ff;
+    }
+    
+    .container {
+        width: 50%;
+        margin: 30px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px gray;
+        text-align: center;
+    }
+    .contact-info {
+        margin-bottom: 20px;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .send-button {
+        background: orange;
+        padding: 10px 20px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .send-button:hover {
+        background: darkorange;
+    }
+</style>
+{% endblock style %}
+
+{% block header %}
+<header>
+    <h1>Contact Us - CUET Mock Test</h1>
+</header>
+{% endblock header %}
+
+{% block content %}
+
+<div class="container">
+    <div class="contact-info">
+        <p><strong>Address:</strong> 123/25d Hans Wahini Nagar, Amethi, UP, India 211103</p>
+        <p><strong>Email:</strong> cuetmock2025help@gmail.com</p>
+    </div>
+    <h2>Send Us a Message</h2>
+    <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="5" placeholder="Your Message" required></textarea>
+        <button class="send-button">Send</button>
+    </form>
+</div>
+
+{% endblock content %}
+
+
+{% block footer %}
+
+<footer>
+    <p>&copy; 2025 CUET Mock Test. All Rights Reserved.</p>
+</footer>
+{% endblock footer %}

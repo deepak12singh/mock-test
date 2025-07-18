@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}participating_university{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0ff;
+    }
+    header, footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+    }
+    nav {
+        display: flex;
+        justify-content: space-between;
+        background: #444;
+        padding: 10px;
+    }
+    .nav-left, .nav-right {
+        display: flex;
+    }
+    nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+    }
+    nav a:hover {
+        background: #555;
+    }
+    .container {
+        width: 80%;
+        margin: 20px auto;
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+    }
+    .university-category {
+        margin-bottom: 30px;
+    }
+    .university-category h3 {
+        background-color: #444;
+        color: white;
+        padding: 10px;
+        margin: 0;
+    }
+    .university-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    .university-list li {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+    .university-list li:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    .university-list li:last-child {
+        border-bottom: none;
+    }
+    .university-list a {
+        color: blue;
+        text-decoration: none;
+        margin-left: 10px;
+    }
+    .university-list a:hover {
+        text-decoration: underline;
+    }
+    .search-bar {
+        text-align: center;
+        margin: 20px auto;
+    }
+    .search-bar input[type="text"] {
+        padding: 10px;
+        width: 50%;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>
+<script>
+    function searchUniversity() {
+        const input = document.getElementById("universitySearch").value.toLowerCase();
+        const universities = document.querySelectorAll(".university-list li");
+        universities.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(input) ? "" : "none";
+        });
+    }
+</script>
+{% endblock style %}
+
+{% block header %}
+<header>
+    <h1>CUET 2025 Participating Universities</h1>
+</header>
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+    <h2>List of Participating Universities</h2>
+    <div class="search-bar">
+        <input type="text" id="universitySearch" onkeyup="searchUniversity()" placeholder="Search for a university...">
+    </div>
+
+    <!-- Central Universities -->
+    <div class="university-category">
+        <h3>List of Universities(with official links)</h3>
+        <ul class="university-list">
+            <li>ALIGARH MUSLIM UNIVERSITY <a href="https://www.amu.ac.in" target="_blank">(Official Website)</a></li>
+            <li>ASSAM UNIVERSITY <a href="http://www.aus.ac.in" target="_blank">(Official Website)</a></li>
+            <li>BABASAHEB BHIMRAO AMBEDKAR UNIVERSITY <a href="http://www.bbau.ac.in" target="_blank">(Official Website)</a></li>
+            <li>BANARAS HINDU UNIVERSITY <a href="http://www.bhu.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL SANSKRIT UNIVERSITY <a href="https://sanskrit.nic.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL TRIBAL UNIVERSITY OF ANDHRA PRADESH <a href="#">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF ANDHRA PRADESH <a href="https://cuap.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF GUJARAT <a href="https://www.cug.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF HARYANA <a href="http://www.cuh.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF HIMACHAL PRADESH <a href="http://www.cuhimachal.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF JAMMU <a href="https://www.cujammu.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF JHARKHAND <a href="http://www.cuj.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF KARNATAKA <a href="https://cuk.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF KASHMIR <a href="http://www.cukashmir.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF KERALA <a href="http://www.cukerala.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF Odisha <a href="http://www.cuo.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF PUNJAB <a href="https://cup.edu.in/" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF RAJASTHAN <a href="http://www.curaj.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF SOUTH BIHAR <a href="http://www.cusb.ac.in" target="_blank">(Official Website)</a></li>
+            <li>CENTRAL UNIVERSITY OF TAMIL NADU <a href="http://www.cutn.ac.in" target="_blank">(Official Website)</a></li>
+            <li>DR. HARISINGH GOUR VISHWAVIDYALAYA <a href="http://www.dhsgsu.ac.in" target="_blank">(Official Website)</a></li>
+            <li>GURU GHASIDAS VISHWAVIDYALAYA <a href="http://www.ggu.ac.in" target="_blank">(Official Website)</a></li>
+            <li>HEMVATI NANDAN BAHUGUNA GARHWAL UNIVERSITY <a href="http://www.hnbgu.ac.in" target="_blank">(Official Website)</a></li>
+            <li>INDIRA GANDHI NATIONAL TRIBAL UNIVERSITY <a href="http://www.igntu.ac.in" target="_blank">(Official Website)</a></li>
+            <li>JAMIA MILLIA ISLAMIA <a href="https://www.jmi.ac.in" target="_blank">(Official Website)</a></li>
+            <li>JAWAHARLAL NEHRU UNIVERSITY <a href="https://www.jnu.ac.in" target="_blank">(Official Website)</a></li>
+            <li>MAHATMA GANDHI CENTRAL UNIVERSITY <a href="http://www.mgcub.ac.in" target="_blank">(Official Website)</a></li>
+            <li>UNIVERSITY OF ALLAHABAD <a href="https://www.allduniv.ac.in" target="_blank">(Official Website)</a></li>
+            <li>UNIVERSITY OF DELHI <a href="http://www.du.ac.in" target="_blank">(Official Website)</a></li>
+            <li>UNIVERSITY OF HYDERABAD <a href="https://uohyd.ac.in" target="_blank">(Official Website)</a></li>
+            <li>VISVA-BHARATI UNIVERSITY <a href="https://www.visvabharati.ac.in" target="_blank">(Official Website)</a></li>
+            <li>SOUTH ASIAN UNIVERSITY <a href="http://www.sau.int" target="_blank">(Official Website)</a></li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %} 
+
+{% endblock script %}

@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+{% block title %}Profile Page{% endblock title %}
+
+{% block content %}
+<style>
+    .account-img {
+        transition: transform 0.2s;
+    }
+    
+    .account-img:hover {
+        transform: scale(1.05);
+    }
+    
+    .form-content {
+        margin-top: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="file"],
+    textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 0.375rem; /* Tailwind's rounded-md */
+        transition: border-color 0.3s;
+    }
+    
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="file"]:focus,
+    textarea:focus {
+        border-color: #3b82f6; /* Tailwind's blue-500 */
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(59, 130, 247, 0.5); /* Tailwind's blue-500 with opacity */
+    }
+    
+    label {
+        font-weight: 500; /* Tailwind's font-medium */
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .form-row {
+            flex-direction: column;
+        }
+    
+        .form-group {
+            margin-bottom: 1rem;
+        }
+    }
+    
+    /* Additional custom styles can be added here */
+</style>
+
+<div class="max-w-2xl mx-auto my-8 p-4 bg-white rounded-lg shadow-md">
+    <div class="flex justify-center mb-4">
+        <img class="rounded-full w-24 h-24 account-img" src="{{ user.profile.avatar.url }}" alt="Profile Picture" style="cursor: pointer;"/>
+    </div>
+
+    {% if user_form.errors %}
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded relative" role="alert">
+            <div id="form_errors">
+                {% for key, value in user_form.errors.items %}
+                    <strong>{{ value }}</strong>
+                {% endfor %}
+            </div>
+            <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-2" aria-label="Close" onclick="this.parentElement.style.display='none';">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+
+    <div class="mt-6 form-content">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="space-y-4">
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700">Username:</label>
+                    {{ user_form.username }}
+                </div>
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700">Email:</label>
+                    {{ user_form.email }}
+                </div>
+                <div class="form-group">
+                    <a href="{% url 'password_change' %}" class="text-blue-600 hover:underline">Change Password</a>
+                    <hr class="my-2">
+                    <label class="block text-sm font-medium text-gray-700">Change Avatar:</label>
+                    {{ profile_form.avatar }}
+                </div>
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700">Bio:</label>
+                    {{ profile_form.bio }}
+                </div>
+            </div>
+            <div class="mt-6 flex space-x-4">
+                <button type="submit" class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Save Changes</button>
+                <button type="reset" class="w-full py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">Reset</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}CUET UG Syllabus{% endblock %}
+
+{% block style %}
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    header, footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #444;
+      padding: 10px 20px;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+    }
+
+    nav a:hover {
+      background: #555;
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 28px;
+      margin: 30px 0 10px;
+      font-weight: bold;
+      color: #222;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 20px auto 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background-color: #ffffff;
+      padding: 40px 25px;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s, background-color 0.3s;
+      text-decoration: none;
+      color: black;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      background-color: #e6f0ff;
+    }
+
+    .icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .card h3 {
+      margin: 10px 0 0;
+      font-size: 20px;
+    }
+  </style>
+{% endblock style %}
+
+{% block header %}
+<header>
+    <h1>Exam Prep Site</h1>
+    <p>Your gateway to exam success</p>
+  </header>
+{% endblock header %}
+
+{% block content %}
+<h2 class="page-title">CUET UG Syllabus</h2>
+
+{% load static %}
+<div class="container">
+  <a href="{% static 'Files/General Paper (MBA etc) COQP12.pdf' %}" download class="card">
+    <span class="icon">🧬</span>
+    <h3>General Paper (MBA etc) (COQP12)</h3>
+  </a>
+
+  <a href="{% static 'Files/Commerce (COQP08).pdf' %}" download class="card">
+    <span class="icon">⚗️</span>
+    <h3>Commerce (COQP08)</h3>
+  </a>
+
+  <a href="{% static 'Files/Computer Science and Information Technology (SCQP09).pdf' %}" download class="card">
+    <span class="icon">💻</span>
+    <h3>Computer Science and Information Technology (SCQP09)</h3>
+  </a>
+
+  <a href="{% static 'Files/Food Science and Technology (SCQP12).pdf' %}" download class="card">
+    <span class="icon">🧠</span>
+    <h3>Food Science and Technology (SCQP12)</h3>
+  </a>
+
+  <a href="{% static 'Files/English (LAQP01).pdf' %}" download class="card">
+    <span class="icon">📚</span>
+    <h3>English (LAQP01)</h3>
+  </a>
+
+  <a href="{% static 'Files/Mathematics (SCQP19).pdf' %}" download class="card">
+    <span class="icon">📐</span>
+    <h3>Mathematics (SCQP19)</h3>
+  </a>
+
+  <a href="{% static 'Files/Hindi (LAQP02).pdf' %}" download class="card">
+    <span class="icon">🌌</span>
+    <h3>Hindi (LAQP02)</h3>
+  </a>
+</div>
+
+{% endblock %}
+
+{% block script %} 
+
+{% endblock script %}

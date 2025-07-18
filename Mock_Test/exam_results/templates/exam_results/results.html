@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+{% load exam_extras %}
+
+{% block title %}Exam History Result{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0ff;
+    }
+    header, footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+    }
+    nav {
+        display: flex;
+        justify-content: space-between;
+        background: #444;
+        padding: 10px;
+    }
+    .nav-left, .nav-right {
+        display: flex;
+    }
+    nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+    }
+    nav a:hover {
+        background: #555;
+    }
+</style>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    header, footer {
+        background: #222;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    .result-container {
+        width: 80%;
+        margin: 30px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    .result-box {
+        text-align: left;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    .result-header {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+    .subject-name {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 15px 0;
+        color: #007bff;
+    }
+    .result-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    .result-details span {
+        text-align: center;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    .showAnalysis {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 15px;
+    }
+    .analysis {
+        display: none;
+    }
+    .question-status {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 10px;
+        margin: 20px 0;
+    }
+    .question-item {
+        padding: 10px;
+        border-radius: 4px;
+        text-align: center;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .correct {
+        background: #28a745;
+        color: white;
+    }
+    .incorrect {
+        background: #dc3545;
+        color: white;
+    }
+    .not-attempted {
+        background: #6c757d;
+        color: white;
+    }
+    .unattempted {
+        background: white;
+        border: 1px solid #dee2e6;
+        color: #666;
+    }
+    .question-details {
+        margin-top: 30px;
+    }
+    .question-detail {
+        margin-bottom: 20px;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .question-detail.correct {
+        background-color: #28a745;
+        border-left: 5px solid #1e7e34;
+        color: white;
+    }
+    .question-detail.incorrect {
+        background-color: #dc3545;
+        border-left: 5px solid #bd2130;
+        color: white;
+    }
+    .question-detail.not-attempted {
+        background-color: #6c757d;
+        border-left: 5px solid #5a6268;
+        color: white;
+    }
+    .question-detail p {
+        margin: 10px 0;
+    }
+    .option-value {
+        font-weight: normal;
+        color: rgba(255, 255, 255, 0.9);
+        margin-left: 5px;
+    }
+    .answer-box {
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin: 5px 0;
+        background-color: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .your-answer {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .correct-answer {
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    .question-detail h4 {
+        color: white;
+        margin-top: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        padding-bottom: 10px;
+    }
+    .actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    .actions a {
+        text-decoration: none;
+    }
+    .btn {
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        display: inline-block;
+    }
+    .btn-primary {
+        background: #007bff;
+        color: white;
+        border: none;
+    }
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+        border: none;
+    }
+    .score-highlight {
+        font-size: 24px;
+        font-weight: bold;
+        color: #28a745;
+    }
+    .status-label {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-left: 5px;
+        color: white;
+    }
+    .status-correct {
+        background-color: #28a745;
+    }
+    .status-incorrect {
+        background-color: #dc3545;
+    }
+    .status-not-attempted {
+        background-color: #6c757d;
+    }
+</style>
+
+{% endblock style %}
+
+
+
+{% block content %}
+
+<div class="result-container">
+    <div class="result-box">
+        <span class="result-header">Mock Test No: {{ exam_name }}</span>
+        <div class="subject-name">Subject: {{ subject }}</div>
+        <div class="result-details">
+            <span>
+                <strong>Attempted</strong><br>
+                {{ attempted }}
+            </span>
+            <span>
+                <strong>Correct</strong><br>
+                {{ correct }}
+            </span>
+            <span>
+                <strong>Wrong</strong><br>
+                {{ wrong }}
+            </span>
+            <span>
+                <strong>Not Attempted</strong><br>
+                {{ not_attempted }}
+            </span>
+            <span>
+                <strong>Marks</strong><br>
+                <span class="score-highlight">{{ score }}</span>
+            </span>
+        </div>
+        <button class="showAnalysis" onclick="toggleAnalysis()">Show Solutions & Analysis</button>
+        
+        <div class="analysis" id="analysis">
+            <h3>Question Analysis</h3>
+            <div class="question-status">
+                {% for question in questions %}
+                    {% if question.is_correct %}
+                        <div class="question-item correct" onclick="scrollToQuestion({{ forloop.counter }})">
+                            Q{{ forloop.counter }}
+                        </div>
+                    {% elif question.attempted %}
+                        <div class="question-item incorrect" onclick="scrollToQuestion({{ forloop.counter }})">
+                            Q{{ forloop.counter }}
+                        </div>
+                    {% else %}
+                        <div class="question-item not-attempted" onclick="scrollToQuestion({{ forloop.counter }})">
+                            Q{{ forloop.counter }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            <div class="question-details">
+                {% for question in questions %}
+                    <div class="question-detail {% if question.is_correct %}correct{% elif question.attempted %}incorrect{% else %}not-attempted{% endif %}" id="question-{{ forloop.counter }}">
+                        <h4>Question {{ forloop.counter }}</h4>
+                        <p>{{ question.text|safe }}</p>
+                        
+                        <div class="answer-box your-answer {% if question.is_correct %}correct{% elif question.attempted %}incorrect{% endif %}">
+                            <p>
+                                <strong>Your Answer:</strong> 
+                                {% if question.selected_answer %}
+                                    Option {{ question.selected_answer }} 
+                                    <span class="option-value">
+                                        {% if question.selected_answer == 'A' %}
+                                            ({{ question.option_a_value|safe }})
+                                        {% elif question.selected_answer == 'B' %}
+                                            ({{ question.option_b_value|safe }})
+                                        {% elif question.selected_answer == 'C' %}
+                                            ({{ question.option_c_value|safe }})
+                                        {% elif question.selected_answer == 'D' %}
+                                            ({{ question.option_d_value|safe }})
+                                        {% endif %}
+                                    </span>
+                                {% else %}
+                                    Not Attempted
+                                {% endif %}
+
+                            </p>
+                        </div>
+                        
+                        <div class="answer-box correct-answer">
+                            <p>
+                                <strong>Correct Answer:</strong> Option {{ question.correct_answer }}
+                                <span class="option-value">
+                                    {% if question.correct_answer == 'A' %}
+                                        ({{ question.option_a_value|safe }})
+                                    {% elif question.correct_answer == 'B' %}
+                                        ({{ question.option_b_value|safe }})
+                                    {% elif question.correct_answer == 'C' %}
+                                        ({{ question.option_c_value|safe }})
+                                    {% elif question.correct_answer == 'D' %}
+                                        ({{ question.option_d_value|safe }})
+                                    {% endif %}
+                                </span>
+                            </p>
+                        </div>
+                        
+                        <p>
+                            <strong>Status:</strong> 
+                            {% if question.is_correct %}
+                                <span class="status-label status-correct">Correct</span>
+                            {% elif question.attempted %}
+                                <span class="status-label status-incorrect">Incorrect</span>
+                            {% else %}
+                                <span class="status-label status-not-attempted">Not Attempted</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="actions">
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+        <a href="/exam/?exam_type={{ exam_type|lower }}&subject={{ subject }}" class="btn btn-primary">Take Another Test</a>
+    </div>
+</div>
+
+<script>
+
+    function toggleAnalysis() {
+        const analysis = document.getElementById('analysis');
+        const button = document.querySelector('.showAnalysis');
+        
+        if (analysis.style.display === 'block') {
+            analysis.style.display = 'none';
+            button.textContent = 'Show Solutions & Analysis';
+        } else {
+            analysis.style.display = 'block';
+            button.textContent = 'Hide Solutions & Analysis';
+        }
+    }
+
+    function scrollToQuestion(number) {
+        const questionElement = document.getElementById(`question-${number}`);
+        if (questionElement) {
+            questionElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+</script>
+{% endblock %}

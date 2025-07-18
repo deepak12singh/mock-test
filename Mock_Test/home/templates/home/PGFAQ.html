@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}FAQ - CUET PG | Exam Prep{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0ff;
+    }
+    header, footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+    }
+    nav {
+        display: flex;
+        justify-content: space-between;
+        background: #444;
+        padding: 10px;
+    }
+    .nav-left, .nav-right {
+        display: flex;
+    }
+    nav a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+    }
+    nav a:hover {
+        background: #555;
+    }
+    .container {
+        width: 80%;
+        margin: 30px auto;
+    }
+    .faq-container {
+        max-width: 800px;
+        margin: auto;
+    }
+    .faq-box {
+        background: white;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .question {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock style %}
+
+{% block header %}
+<header>
+    <h1>CUET 2025 Mock Test | Attempt Free CUET Mocks</h1>
+</header>
+
+{% endblock header %}
+
+{% block content %}
+<div class="container">
+    <div class="faq-container">
+        <h2>Frequently Asked Questions (FAQ) - CUET PG</h2>
+        
+        <div class="faq-box">
+            <div class="question">1. What is CUET PG?</div>
+            <div class="answer">CUET PG (Common University Entrance Test for Postgraduate courses) is an entrance exam conducted for admission into various postgraduate programs in India.</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">2. Who conducts the CUET PG exam?</div>
+            <div class="answer">CUET PG is conducted by the National Testing Agency (NTA).</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">3. What is the eligibility criteria for CUET PG?</div>
+            <div class="answer">Candidates who have completed or are in their final year of a bachelor's degree program are eligible to apply for CUET PG.</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">4. How can I register for CUET PG?</div>
+            <div class="answer">You can register for CUET PG through the official NTA website by filling out the online application form.</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">5. What is the exam pattern for CUET PG?</div>
+            <div class="answer">The exam consists of multiple-choice questions (MCQs) covering subject-specific topics, general knowledge, and reasoning.</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">6. How can I prepare for CUET PG?</div>
+            <div class="answer">You can prepare using mock tests, previous years' question papers, and study materials available on Exam Prep.</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">7. Is CUET PG conducted online or offline?</div>
+            <div class="answer">CUET PG is conducted in Computer-Based Test (CBT) mode.</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">8. When is CUET PG conducted?</div>
+            <div class="answer">CUET PG is usually conducted once a year. The official exam dates are announced by NTA on their website.</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">9. What are the passing marks for CUET PG?</div>
+            <div class="answer">There are no specific passing marks; admissions depend on the cut-off scores set by individual universities.</div>
+        </div>
+        
+        <div class="faq-box">
+            <div class="question">10. Can I change my exam center after submitting the application?</div>
+            <div class="answer">No, once you have selected an exam center, changes cannot be made after the application is submitted.</div>
+        </div>
+    </div>
+    <div class="faq-container" style="text-align: center; margin-top: 20px;">
+        <p>For more FAQs, visit the official CUET PG FAQ document: <a href="https://exams.nta.ac.in/CUET-PG/images/faqs-cuet-pg.pdf" target="_blank">More FAQs</a></p>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %} 
+
+{% endblock script %}
