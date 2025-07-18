@@ -12,9 +12,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-CSRF_TRUSTED_ORIGINS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost,172.16.1.30').split(',')
+# Split comma-separated hostnames
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost,172.16.1.30').split(',')
+# Generate CSRF_TRUSTED_ORIGINS by prepending https:// to each host (except localhost/127.0.0.1)
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{host}" for host in ALLOWED_HOSTS
+    if not host.startswith("127.") and not host.startswith("localhost")
+]
 
 # Installed Apps
 INSTALLED_APPS = [
