@@ -12,6 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your-default-secret-key')
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
+CSRF_TRUSTED_ORIGINS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost,172.16.1.30').split(',')
+
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost,172.16.1.30').split(',')
 
 # Installed Apps
@@ -82,6 +84,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
+
+
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
